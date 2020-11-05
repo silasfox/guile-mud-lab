@@ -1,4 +1,5 @@
-#!/usr/bin/guile -s
+#!/usr/bin/env sh
+exec guile -s "$0" "$@"
 !#
 
 (use-modules (mud-lab))

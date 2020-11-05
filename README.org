@@ -8,6 +8,10 @@ A small library to create a MUD. At least it aims to be MUDable sometime. At the
 
 See INSTALL.
 
+** Prerequisites
+
+ Guile Scheme
+ 
 * Example game
 
 If you've installed the library, you can just 
