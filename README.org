@@ -2,3 +2,17 @@
 
 #+TITLE: README for Guile Mud-Lab
 
+A small library to create a MUD. At least it aims to be MUDable sometime. At the moment it is single-player only.
+
+* Installing the library
+
+See INSTALL.
+
+* Example game
+
+If you've installed the library, you can just 
+
+#+BEGIN_SRC
+chmod +x example-game
+./example-game
+#+END_SRC
