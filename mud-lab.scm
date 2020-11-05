@@ -136,7 +136,12 @@
 					    (loop (get-a-lot-of-input))))
 		((equal? cmd "drop") (begin (drop (cadr input) (get-location-of player rooms) player)
 					    (loop (get-a-lot-of-input))))
-		((equal? cmd "exit") (display "Goodbye!\n"))))))
+		((equal? cmd "read") (begin (read-object (cadr input) player (get-location-of player rooms))
+					    (loop (get-a-lot-of-input))))
+		((equal? cmd "exit") (display "Goodbye!\n"))
+		(else (begin (display "I don't know how to do that.\n")
+			     (loop (get-a-lot-of-input))))))))
+    (print-location-of player rooms)
     (loop (get-a-lot-of-input))))
 
 (define get-a-lot-of-input
@@ -176,7 +181,7 @@
   (λ (objects name)
     (cond ((null? objects) '())
 	  ((equal? (name-of (car objects)) name) (car objects))
-	  (else get-object-from (cdr objects)))))
+	  (else get-object-from (cdr objects) name))))
 
 (define get-object-from-inventory-of
   (λ (player name)
@@ -191,6 +196,11 @@
 	  (begin (add-to-objects-of location object)
 		 (update-player player "inventory" (λ () (delete object inv))))))))
 
+(define check-for-object
+  (λ (objects name)
+    (cond ((null? objects) #f)
+	  ((equal? (name-of (car objects)) name) #t)
+	  (else check-for-object (cdr objects) name))))
 
 (define add-to-objects-of
   (λ (location object)
@@ -199,3 +209,12 @@
 (define update-player
   (λ (player property f)
     (set! player (assoc-set! player property (f)))))
+
+(define read-object
+  (λ (name player location)
+    (let ((object (cond ((check-for-object (inventory-of player) name) (get-object-from-inventory-of player name))
+			((check-for-object (objects-of location) name) (get-object-of-location location name))
+			(else '()))))
+      (if (null? object)
+	  #f
+	  (display (cdr (assoc "description" object)))))))
