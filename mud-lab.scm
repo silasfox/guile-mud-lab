@@ -138,6 +138,9 @@
 					    (loop (get-a-lot-of-input))))
 		((equal? cmd "read") (begin (read-object (cadr input) player (get-location-of player rooms))
 					    (loop (get-a-lot-of-input))))
+		((equal? cmd "say") (begin (display (cdr input))
+					   (newline)
+					   (loop (get-a-lot-of-input))))
 		((equal? cmd "exit") (display "Goodbye!\n"))
 		(else (begin (display "I don't know how to do that.\n")
 			     (loop (get-a-lot-of-input))))))))
@@ -181,7 +184,7 @@
   (λ (objects name)
     (cond ((null? objects) '())
 	  ((equal? (name-of (car objects)) name) (car objects))
-	  (else get-object-from (cdr objects) name))))
+	  (else (get-object-from (cdr objects) name)))))
 
 (define get-object-from-inventory-of
   (λ (player name)
@@ -200,7 +203,7 @@
   (λ (objects name)
     (cond ((null? objects) #f)
 	  ((equal? (name-of (car objects)) name) #t)
-	  (else check-for-object (cdr objects) name))))
+	  (else (check-for-object (cdr objects) name)))))
 
 (define add-to-objects-of
   (λ (location object)
@@ -217,4 +220,4 @@
 			(else '()))))
       (if (null? object)
 	  #f
-	  (display (cdr (assoc "description" object)))))))
+	  ((cdr (assoc "read" object)))))))
