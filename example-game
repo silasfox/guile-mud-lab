@@ -3,55 +3,82 @@ exec guile -s "$0" "$@"
 !#
 
 (use-modules (mud-lab))
-
 (define player (make-player "player"))
 
 (define bible
-  (lambda (x)
-    (cond ((eq? x 'name) "bible")
-          ((eq? x 'name-with-article) "a bible")
+    (lambda (x)
+      (cond ((eq? x 'name) '("bible"))
+            ((eq? x 'name-with-article) "a bible")
+            ((eq? x 'read)
+             (display "I made haste, and delayed not to keep thy commandments.
+		-- Psalms 119:60")
+             (newline)))))
+
+(define (alice x)
+    (cond ((eq? x 'name) '("alice"))
+          ((eq? x 'name-with-article) "Alice's Adventures in Wonderland (alice)")
           ((eq? x 'read)
-           (display "I made haste, and delayed not to keep thy commandments.
-		-- Psalms 119:60
-")))))
+           (display "We are all mad here!")
+           (newline))))
 
 (define lotr
-  (lambda (x)
-    (cond ((eq? x 'name) "lotr")
-          ((eq? x 'name-with-article) "the Lord of the Rings (lotr)")
-          ((eq? x 'read)
-           (display "It is a dangerous business, Frodo, stepping out of your
-front door.\n")))))
+    (lambda (x)
+      (cond ((eq? x 'name) '("lotr"))
+            ((eq? x 'name-with-article) "the Lord of the Rings (lotr)")
+            ((eq? x 'read)
+             (display "It is a dangerous business, Frodo, stepping out of your
+front door.")
+             (newline)))))
+
+(define (whiskey x)
+    (cond ((eq? x 'name) '("whiskey" "glass"))
+          ((eq? x 'name-with-article) "a glass of whiskey")
+          ((eq? x 'drink)
+           (display "That was a good drink.")
+           (newline))))
 
 (define bus-stop (make-room "bus stop"
                             "A bus stop. The sign says that the next bus will come exactly five minutes before the rapture. The last one apparently took the dinosaurs away. All of them."
-                            (cons -1 1)
+                            (list -1 1 0)
                             (list "north")))
 
 (define parliament (make-room "parliament"
                               "The parliament. You smell the smell of corruption and evil."
-                              (cons 1 1)
+                              (list 1 1 0)
                               (list "south")))
 
 (define loo (make-room "loo"
                        "The loo."
-                       (cons 1 0)
+                       (list 1 0 0)
                        (list "south")))
-
-(loo 'add-object lotr)
 
 (define bar (make-room "bar"
                        "A bar. Do you want a whisky?"
-                       (cons 0 0)
-                       (list "north" "east")))
+                       (list 0 0 0)
+                       (list "north" "east" "up")))
 
-(bar 'add-object bible)
+(define upper-room (make-room "upper-room"
+                              "A small upper room"
+                              (list 0 0 1)
+                              (list "down")))
 
 (define street (make-room "street"
                           "A deserted lonely depressing street. It rains."
-                          (cons 0 1)
-                          (list "west" "north" "south")))
+                          (list 0 1 0)
+                          (list "east" "west" "north" "south")))
 
-(define rooms (list bus-stop parliament loo bar street))
+(define cliff (make-room "cliff"
+                         "You're standing atop a cliff."
+                         (list 0 2 0)
+                         (list "west")))
 
-;;;(game player rooms)
+(define rooms (list bus-stop parliament loo bar street cliff upper-room))
+
+(define main (lambda () 
+               (loo 'add-object lotr)
+               (bar 'add-object bible)
+               (bar 'add-object whiskey)
+               (bus-stop 'add-object alice)
+               (game player rooms)))
+
+(main)

@@ -9,21 +9,11 @@
 
 (define foo (make-player "foo"))
 
-(define bar (make-room "bar" "A bar" (cons 0 0) (list "north")))
-
-(define baz (make-room "baz" "Not a bar" (cons 1 0) (list "south")))
-
-(define rooms (list bar baz))
-
-(test-equal "Player"
-  foo
-  (make-player "foo"))
-
-(go-to "north" foo rooms)
+(define bar (make-room "bar" "A bar" (list 0 0 0) (list "north")))
 
 (test-equal "Move"
-  (cdr (assoc "location" baz))
-  (cdr (assoc "location" foo)))
+  (bar 'location)
+  (foo 'location))
 
 (test-end "test-suite")
 

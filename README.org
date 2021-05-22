@@ -10,7 +10,8 @@ See INSTALL.
 
 ** Prerequisites
 
- Guile Scheme
+Guile Scheme
+Guile Hall
  
 * Example game
 
