@@ -8,7 +8,7 @@
   (description "")
   (home-page "")
   (license gpl3+)
-  (dependencies `("guile-readline" (ice-9 readline) ,guile-readline))
+  (dependencies `(("guile-readline" (ice-9 readline) ,guile-readline)))
   (files (libraries ((scheme-file "mud-lab")))
          (tests ((directory
                    "tests"
